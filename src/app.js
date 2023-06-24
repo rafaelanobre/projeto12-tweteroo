@@ -5,12 +5,6 @@ const app = express();
 const tweets = [];
 const usuarios = [];
 
-//modelo usuario
-const usuario = {
-	username: 'bobesponja', 
-	avatar: "https://cdn.shopify.com/s/files/1/0150/0643/3380/files/Screen_Shot_2019-07-01_at_11.35.42_AM_370x230@2x.png" 
-}
-
 //modelo tweet
 const tweet = {
     username: "bobesponja",
@@ -28,10 +22,24 @@ app.get("/tweets", (req,res) =>{
 });
 
 app.post("/sign-up",(req,res)=>{
-    //receber username e avatar pelo body da req
-    //salvar no array de usuários
+    const {username, avatar} = req.body;
 
-    //lembrar de tratar erros
+    if(!username || !avatar){
+        res.sendStatus(400)
+        return
+    }
+    if(typeof username !== "string" || typeof avatar !== "string"){
+        res.send("Todos os campos são obrigatórios!")
+        return
+    }
+
+    const usuario = {
+        username: username, 
+        avatar: avatar 
+    }
+
+    usuarios.push(usuario);
+
     res.status(201).send("OK")
 })
 
