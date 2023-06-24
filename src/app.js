@@ -15,6 +15,7 @@ const tweet = {
 }
 
 app.get("/tweets", (req,res) =>{
+    let ultimosTweets = tweets.slice(-10);
     //Retornar os 10 últimos tweets publicados
 
     //retornar username, avatar e tweet
