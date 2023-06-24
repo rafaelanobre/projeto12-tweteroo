@@ -8,21 +8,22 @@ app.use(express.json());
 const tweets = [];
 const usuarios = [];
 
-//modelo tweet
-const tweet = {
-    username: "bobesponja",
-    tweet: "Eu amo hambúrguer de siri!"
-}
 
 app.get("/tweets", (req,res) =>{
-    let ultimosTweets = tweets.slice(-10);
-    //Retornar os 10 últimos tweets publicados
+    let ultimosTweets = []
+    ultimosTweets = tweets.slice(-10);
 
-    //retornar username, avatar e tweet
-    //pegar o avatar do array de usuários, pesquisando pelo usuário
+    const tweetsComAvatar = ultimosTweets.map(tweet => {
+        const usuarioEncontrado = usuarios.find(usuario => usuario.username === tweet.username);
+        
+        return {
+            username: tweet.username,
+            avatar: usuarioEncontrado.avatar,
+            tweet: tweet.tweet
+        };
+    });
 
-    //Caso não tenha nenhum tweet cadastrado, retorna um array vazio
-    res.send();
+    res.send(tweetsComAvatar);
 });
 
 app.post("/sign-up",(req,res)=>{
@@ -48,13 +49,30 @@ app.post("/sign-up",(req,res)=>{
 })
 
 app.post("/tweets", (req,res)=>{
-    //Se o usuário não estiver cadastrado (username não fez sign-up anteriormente)
-    //deve retornar a mensagem “UNAUTHORIZED” e status 401
+    const {username, tweet} = req.body;
 
-    //lembrar de tratar erros
+    if(!username || !tweet){
+        res.status(400).send("Todos os campos são obrigatórios!")
+        return
+    }
 
-    //receber username e tweet pelo body da req
-    //salvar no array de tweets
+    if(typeof username !== "string" || typeof tweet !== "string"){
+        res.status(400).send("Todos os campos são obrigatórios!")
+        return
+    }
+
+    if (!usuarios.includes(username)) {
+        res.status(401).send("“UNAUTHORIZED”");
+        return;
+    }
+
+    const newTweet = {
+        username: username,
+        tweet: tweet
+    }
+
+    tweets.push(newTweet);
+
     res.status(201).send("OK")
 })
 
