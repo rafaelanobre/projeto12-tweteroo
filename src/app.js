@@ -1,6 +1,9 @@
 import express from 'express';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
+app.use(express.json());
 
 const tweets = [];
 const usuarios = [];
@@ -25,11 +28,11 @@ app.post("/sign-up",(req,res)=>{
     const {username, avatar} = req.body;
 
     if(!username || !avatar){
-        res.sendStatus(400)
+        res.status(400).send("Todos os campos são obrigatórios!")
         return
     }
     if(typeof username !== "string" || typeof avatar !== "string"){
-        res.send("Todos os campos são obrigatórios!")
+        res.status(400).send("Todos os campos são obrigatórios!")
         return
     }
 
