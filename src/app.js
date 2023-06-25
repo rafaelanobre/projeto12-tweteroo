@@ -8,7 +8,6 @@ app.use(express.json());
 const tweets = [];
 const usuarios = [];
 
-
 app.get("/tweets", (req,res) =>{
     let ultimosTweets = []
     ultimosTweets = tweets.slice(-10);
@@ -62,7 +61,7 @@ app.post("/tweets", (req,res)=>{
     }
 
     if (!usuarios.includes(username)) {
-        res.status(401).send("“UNAUTHORIZED”");
+        res.status(401).send("UNAUTHORIZED");
         return;
     }
 
