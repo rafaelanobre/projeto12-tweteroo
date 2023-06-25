@@ -48,25 +48,27 @@ app.post("/sign-up",(req,res)=>{
 })
 
 app.post("/tweets", (req,res)=>{
-    const {username, tweet} = req.body;
+    const {tweet} = req.body;
+    const {user} = req.headers;
 
-    if(!username || !tweet){
+
+    if(!user || !tweet){
         res.status(400).send("Todos os campos são obrigatórios!")
         return
     }
 
-    if(typeof username !== "string" || typeof tweet !== "string"){
+    if(typeof user !== "string" || typeof tweet !== "string"){
         res.status(400).send("Todos os campos são obrigatórios!")
         return
     }
 
-    if (!usuarios.includes(username)) {
+    if (!usuarios.includes(user)) {
         res.status(401).send("UNAUTHORIZED");
         return;
     }
 
     const newTweet = {
-        username: username,
+        username: user,
         tweet: tweet
     }
 
