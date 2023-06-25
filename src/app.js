@@ -70,7 +70,7 @@ app.post("/tweets", (req,res)=>{
         return
     }
 
-    if (!usuarios.find(usuario => usuario.username === USERNAME)) {
+    if (!usuarios.find(usuario => usuario.username === user)) {
         res.status(401).send("UNAUTHORIZED");
         return;
     }
