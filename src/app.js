@@ -9,20 +9,49 @@ const tweets = [];
 const usuarios = [];
 
 app.get("/tweets", (req,res) =>{
-    let ultimosTweets = []
-    ultimosTweets = tweets.slice(-10);
+    const page = parseInt(req.query.page);
+    if(page === undefined){
+        let ultimosTweets = []
+        ultimosTweets = tweets.slice(-10);
 
-    const tweetsComAvatar = ultimosTweets.map(tweet => {
-        const usuarioEncontrado = usuarios.find(usuario => usuario.username === tweet.username);
-        
-        return {
-            username: tweet.username,
-            avatar: usuarioEncontrado.avatar,
-            tweet: tweet.tweet
-        };
-    });
+        const tweetsComAvatar = ultimosTweets.map(tweet => {
+            const usuarioEncontrado = usuarios.find(usuario => usuario.username === tweet.username);
+            
+            return {
+                username: tweet.username,
+                avatar: usuarioEncontrado.avatar,
+                tweet: tweet.tweet
+            };
+        });
 
-    res.send(tweetsComAvatar);
+        res.send(tweetsComAvatar);
+        return;
+    }
+    if(page<1){
+        res.status(400).send("Informe uma página válida!");
+        return;
+    }
+    if(page>0){
+        const tweetsReverse = [...tweets].reverse();
+
+        const indiceComeco = (page - 1) * 10;
+        const indiceFinal = indiceComeco + 9;
+
+        const limiteArray = tweetsReverse.slice(indiceComeco, indiceFinal);
+
+        const tweetsComAvatar = limiteArray.map(tweet => {
+            const usuarioEncontrado = usuarios.find(usuario => usuario.username === tweet.username);
+            
+            return {
+                username: tweet.username,
+                avatar: usuarioEncontrado.avatar,
+                tweet: tweet.tweet
+            };
+        });
+
+        res.send(tweetsComAvatar);
+        return;
+    }
 });
 
 app.get("/tweets/:USERNAME", (req,res)=>{
