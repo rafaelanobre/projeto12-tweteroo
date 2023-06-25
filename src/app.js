@@ -10,7 +10,7 @@ const usuarios = [];
 
 app.get("/tweets", (req,res) =>{
     const page = parseInt(req.query.page);
-    if(page === NaN){
+    if(isNaN(page)){
         let ultimosTweets = []
         ultimosTweets = tweets.slice(-10);
 
