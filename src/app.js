@@ -25,6 +25,14 @@ app.get("/tweets", (req,res) =>{
     res.send(tweetsComAvatar);
 });
 
+app.get("/tweets/:USERNAME", (req,res)=>{
+    const { USERNAME } = req.params
+
+    const userTweets = tweets.filter(tweet => tweet.username === USERNAME);
+
+    res.send(userTweets);
+});
+
 app.post("/sign-up",(req,res)=>{
     const {username, avatar} = req.body;
 
@@ -62,7 +70,7 @@ app.post("/tweets", (req,res)=>{
         return
     }
 
-    if (!usuarios.includes(user)) {
+    if (!usuarios.find(usuario => usuario.username === USERNAME)) {
         res.status(401).send("UNAUTHORIZED");
         return;
     }
